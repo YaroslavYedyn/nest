@@ -9,6 +9,6 @@ export default () => ({
   },
   cache: {
     host: process.env.REDIRECT_HOST || 'redis',
-    post: parseInt(process.env.REDIRECT_PORT, 10) || 6379,
+    post: parseInt(process.env.REDIRECT_PORT, 10) || 6380,
   },
 });

@@ -5,7 +5,7 @@ export const databaseConfig = (entities: any[]) => (config: ConfigService) => {
 
   return {
     type: 'postgres',
-    // synchronize: true,
+    synchronize: true,
     logging: true,
     ...database,
     entities,
