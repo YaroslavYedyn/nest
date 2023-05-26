@@ -8,6 +8,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 // Modules
 import { AppController } from './app.controller';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 // Services
 import { AppService } from './app.service';
@@ -18,10 +19,12 @@ import { databaseConfig } from './config/database.config';
 import { cacheConfig } from './config/cache.config';
 
 import { User } from './users/entities';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [
     UsersModule,
+    AuthModule,
     ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
     CacheModule.registerAsync<RedisClientOptions>({
       imports: [ConfigModule],
@@ -42,6 +45,7 @@ import { User } from './users/entities';
       useClass: CacheInterceptor,
     },
     AppService,
+    // UsersService,
   ],
   exports: [CacheModule],
 })

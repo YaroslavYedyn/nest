@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 export const cacheConfig = (config: ConfigService) => {
   const cacheConfig = config.get('cache');
-
+  console.log(cacheConfig);
   return {
     store: redisStore as any,
     ...cacheConfig,

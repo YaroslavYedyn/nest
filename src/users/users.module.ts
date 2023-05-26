@@ -5,7 +5,6 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { pathToRegexp } from 'path-to-regexp';
 
 import { UsersService } from './users.service';
 import { User } from './entities';
@@ -16,6 +15,7 @@ import { CheckExistUserMiddleware } from './middleware/check-exist-user.middlewa
   imports: [TypeOrmModule.forFeature([User])],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

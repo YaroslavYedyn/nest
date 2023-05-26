@@ -10,6 +10,9 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
+  @IsNotEmpty()
+  isActive: boolean;
+
   @ApiProperty()
   @IsNotEmpty()
   firstName: string;
@@ -17,4 +20,9 @@ export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   lastName: string;
+
+  @IsNotEmpty()
+  password: string;
+
+  activation_key: string;
 }

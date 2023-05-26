@@ -15,9 +15,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const newEntity = await this.usersRepository.save(createUserDto);
-
-    return newEntity;
+    return await this.usersRepository.save(createUserDto);
   }
 
   async findAll() {
@@ -60,7 +58,8 @@ export class UsersService {
     };
   }
 
-  async checkExist(id: number): Promise<boolean> {
-    return await this.usersRepository.exist({ where: { id } });
+  async checkExist(where: { id?: number; email?: string }): Promise<boolean> {
+    return await this.usersRepository.exist({ where });
   }
+
 }

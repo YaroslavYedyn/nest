@@ -8,7 +8,7 @@ export default () => ({
     database: process.env.DATABASE_NAME || 'localhost',
   },
   cache: {
-    host: process.env.REDIRECT_HOST || 'redis',
-    post: parseInt(process.env.REDIRECT_PORT, 10) || 6380,
+    host: process.env.REDIS_HOST || 'redis',
+    post: parseInt(process.env.REDIS_PORT, 10) || 6380,
   },
 });

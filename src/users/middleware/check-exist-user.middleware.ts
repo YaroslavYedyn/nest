@@ -16,7 +16,7 @@ export class CheckExistUserMiddleware implements NestMiddleware {
       params: { id },
     } = req;
 
-    const exist = await this.userService.checkExist(+id);
+    const exist = await this.userService.checkExist({ id: +id });
 
     if (!exist) {
       throw new HttpException(

@@ -40,7 +40,7 @@ services:
     image: nestjs-api
     container_name: nest
     env_file:
-      - .env
+      - docker.env
     ports:
       - "4040:3000"
     depends_on:
