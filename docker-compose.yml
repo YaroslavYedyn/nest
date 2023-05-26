@@ -2,36 +2,59 @@ version: "3"
 services:
   postgres:
     image: postgres:latest
+    container_name: postgres
     networks:
       - postgres
     volumes:
-      - /data/postgres:/data/postgres
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - "5433:5434"
+    env_file:
+      - docker.env
+
+  redis:
+    image: redis/redis-stack
+    container_name: redis
+    volumes:
+      - redis:/data
+    networks:
+      - redis
+    ports:
+      - "6379:6380"
     env_file:
       - docker.env
 
   pgadmin:
     image: dpage/pgadmin4:6.18
+    container_name: pgAdmin
     networks:
       - postgres
     ports:
       - "8080:80"
     volumes:
-      - /data/pgadmin:/root/.pgadmin
+      - pgAdmin:/root/.pgadmin
     env_file:
       - docker.env
 
   nestjs-api:
     image: nestjs-api
+    container_name: nest
     env_file:
       - .env
     ports:
-      - "3000:3000"
+      - "3000:8888"
     depends_on:
       - postgres
+      - redis
     networks:
       - postgres
-
-
+      - redis
+volumes:
+  postgres:
+  pgAdmin:
+  redis:
 networks:
   postgres:
+    driver: bridge
+  redis:
     driver: bridge
