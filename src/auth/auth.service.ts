@@ -43,6 +43,46 @@ export class AuthService {
     });
   }
 
+  async validateUser({ login, password }: SignInDto) {
+    const user = await this.usersRepository.findOne({
+      where: { email: login },
+    });
+
+    if (!user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: 'Invalid authorization data',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: 'Invalid authorization data',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (!user.isActive) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          message: 'User not active',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    return user;
+  }
+
   async signIn(signIn: SignInDto) {
     const { login, password } = signIn;
 

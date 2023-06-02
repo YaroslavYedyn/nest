@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import type { RedisClientOptions } from 'redis';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheModule } from '@nestjs/cache-manager';
+import spmAgent from 'spm-agent-nodejs';
 
 // Modules
 import { AppController } from './app.controller';

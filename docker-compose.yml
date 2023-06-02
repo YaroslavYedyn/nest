@@ -8,7 +8,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
-      - "5433:5434"
+      - "5433:5432"
     env_file:
       - docker.env
 
@@ -35,12 +35,36 @@ services:
       - pgAdmin:/root/.pgadmin
     env_file:
       - docker.env
+  st-agent:
+    image: sematext/agent:latest
+    privileged: true
+    environment:
+      - INFRA_TOKEN=04ba0b19-88c0-4917-ab85-9ee386b245c7
+      - SERVER_BASE_URL=https://spm-receiver.sematext.com
+      - LOGS_RECEIVER_URL=https://logsene-receiver.sematext.com
+      - EVENT_RECEIVER_URL=https://event-receiver.sematext.com
+      - COMMAND_SERVER_URL=https://command.sematext.com
+    cap_add:
+      - SYS_ADMIN
+    restart: always
+    volumes:
+      - /:/hostfs:ro
+      - /etc/passwd:/etc/passwd:ro
+      - /etc/group:/etc/group:ro
+      - /var/run/:/var/run
+      - /sys/kernel/debug:/sys/kernel/debug
+      - /sys:/host/sys:ro
+      - /dev:/hostfs/dev:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   nestjs-api:
     image: nestjs-api
-    container_name: nest
+    container_name: nestjs-api
     env_file:
       - docker.env
+    environment:
+      - MONITORING_TOKEN=82a7c71c-8323-4144-ad30-49a5f6359e20
+      - INFRA_TOKEN=04ba0b19-88c0-4917-ab85-9ee386b245c7
     ports:
       - "4040:3000"
     depends_on:

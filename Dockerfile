@@ -1,5 +1,5 @@
 # Base image
-FROM node:18 AS development
+FROM node:18 AS nest
 
 # Create app directory
 WORKDIR /usr/src/app
