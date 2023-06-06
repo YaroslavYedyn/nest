@@ -4,7 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import type { RedisClientOptions } from 'redis';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheModule } from '@nestjs/cache-manager';
+import { PassportModule } from '@nestjs/passport';
+
+// this need for monitoring
+// eslint-disable-next-line
 import spmAgent from 'spm-agent-nodejs';
+
+console.log(spmAgent);
 
 // Modules
 import { AppController } from './app.controller';
@@ -20,7 +26,7 @@ import { databaseConfig } from './config/database.config';
 import { cacheConfig } from './config/cache.config';
 
 import { User } from './users/entities';
-import { UsersService } from './users/users.service';
+import { Session } from './auth/entities';
 
 @Module({
   imports: [
@@ -33,10 +39,11 @@ import { UsersService } from './users/users.service';
       isGlobal: true,
       useFactory: cacheConfig,
     }),
+    PassportModule.register({ session: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: databaseConfig([User]),
+      useFactory: databaseConfig([User, Session]),
     }),
   ],
   controllers: [AppController],

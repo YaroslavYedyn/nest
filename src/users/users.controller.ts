@@ -8,16 +8,17 @@ import {
   Delete,
   UseInterceptors,
   CacheInterceptor,
-  CacheKey,
   ParseIntPipe,
   CacheTTL,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 
 @Controller('users')
 @ApiTags('users')
@@ -29,6 +30,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @UseGuards(AuthenticatedGuard)
   @Get()
   findAll() {
     return this.usersService.findAll();

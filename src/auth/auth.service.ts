@@ -1,13 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
+import { Repository } from 'typeorm';
 
 import { SignUpDto, SignInDto } from './dto';
 import { authConstants } from '../constants';
 import { UsersService } from '../users/users.service';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { User } from '../users/entities';
+import { TokenInterface } from './interfaces';
 
 @Injectable()
 export class AuthService {
@@ -83,47 +84,12 @@ export class AuthService {
     return user;
   }
 
-  async signIn(signIn: SignInDto) {
-    const { login, password } = signIn;
+  login(user: User): TokenInterface {
+    const payload = { username: user.email, sub: user.id };
 
-    // const userExist = await this.userService.checkExist({ email: login });
-
-    const user = await this.usersRepository.findOne({
-      where: { email: login },
-    });
-
-    if (!user) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          message: 'Invalid authorization data',
-        },
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          message: 'Invalid authorization data',
-        },
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    if (!user.isActive) {
-      throw new HttpException(
-        {
-          status: HttpStatus.UNAUTHORIZED,
-          message: 'User not active',
-        },
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-
-    return user;
+    console.log(payload);
+    return {
+      access_token: 'ds',
+    };
   }
 }

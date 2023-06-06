@@ -4,13 +4,14 @@ import {
   Post,
   Body,
   HttpStatus,
-  UseGuards, Req,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 
 import { AuthService } from './auth.service';
-import { SignUpDto, SignInDto } from './dto';
+import { SignUpDto } from './dto';
+import { LoginGuard } from './guards/login.guard';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -26,11 +27,11 @@ export class AuthController {
     });
   }
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LoginGuard)
   @Post('signIn')
   async SignIn(@Req() req, @Res() res) {
-    console.log(req.user);
+    const tokens = this.authService.login(req.user);
 
-    res.status(HttpStatus.OK).json(req.user);
+    res.status(HttpStatus.OK).json(tokens);
   }
 }
